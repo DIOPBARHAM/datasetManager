@@ -79,3 +79,12 @@ if domaine in domaines_autorises:
     print("Domaine valide")
 else:
     print("Domaine non autorisé")
+
+# 9- Créez une liste contenant les datasets. Chaque ajout est enregistré dans la liste
+
+datasets = []
+
+datasets.append(dataset)
+
+print("\nListe des datasets :")
+print(datasets)
