@@ -46,3 +46,19 @@ while choix != "4":
 
     else:
         print("Choix invalide")
+
+# 6	Créez un dictionnaire pour stocker les métadonnées de chaque dataset
+
+dataset = {
+    "nom": nom,
+    "domaine": domaine,
+    "lignes": lignes,
+    "colonnes": colonnes,
+    "taille": taille,
+    "format": format_dataset,
+    "public": public
+}
+
+print("\n===== Résumé du dataset =====")
+
+print(dataset)
