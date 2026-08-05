@@ -47,7 +47,7 @@ while choix != "4":
     else:
         print("Choix invalide")
 
-# 6	Créez un dictionnaire pour stocker les métadonnées de chaque dataset
+# 6-Créez un dictionnaire pour stocker les métadonnées de chaque dataset
 
 dataset = {
     "nom": nom,
@@ -62,3 +62,13 @@ dataset = {
 print("\n===== Résumé du dataset =====")
 
 print(dataset)
+
+# 7- Créez un tuple contenant les domaines autorisés.
+
+domaines_autorises = (
+    "Santé",
+    "Finance",
+    "Agriculture",
+    "Transport",
+    "Education"
+)
