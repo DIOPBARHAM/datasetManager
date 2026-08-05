@@ -1,6 +1,6 @@
-from menu import afficher_menu
-from gestion import ajouter_dataset, afficher_datasets, rechercher_datasets, modifier_datasets, supprimer_datasets, trier_datasets
-from statistiques import statistiques
+from interface.menu import afficher_menu
+from datasets.gestion import ajouter_dataset, afficher_datasets, rechercher_datasets, modifier_datasets, supprimer_datasets, trier_datasets
+from datasets.statistiques import statistiques
 
 
 # Menu

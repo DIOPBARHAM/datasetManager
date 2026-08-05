@@ -114,7 +114,6 @@ def rechercher_datasets():
      if ds["nom"].lower() == nom.lower():
 
         print(ds)
-        return
 
      raise LookupError("Dataset introuvable.")
 
