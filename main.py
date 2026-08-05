@@ -1,71 +1,8 @@
-# 3- Demandez à l utilisateur de saisir les métadonnées d un dataset
+import csv
+import os
 
-nom = input("Nom du dataset : ")
-domaine = input("Domaine : ")
-lignes = int(input("Nombre de lignes : "))
-colonnes = int(input("Nombre de colonnes : "))
-taille = float(input("Taille en Mo : "))
-format_dataset = input("Format (csv ou json) : ")
-public = input("Dataset public (true ou false) : ")
-# 4-Affichez ensuite un résumé formaté.
-print("\n===== Résumé du dataset =====")
-print("Nom :", nom)
-print("Domaine :", domaine)
-print("Nombre de lignes :", lignes)
-print("Nombre de colonnes :", colonnes)
-print("Taille :", taille, "Mo")
-print("Format :", format_dataset)
-print("Public :", public)
 
-# Créez un menu interactif (provisoire)
-
-choix = ""
-
-while choix != "4":
-
-    print("\n========================")
-    print("1. Ajouter un dataset")
-    print("2. Afficher les datasets")
-    print("3. Rechercher")
-    print("4. Quitter")
-    print("========================")
-
-    choix = input("Votre choix : ")
-
-    if choix == "1":
-        print("Ajout d'un dataset")
-
-    elif choix == "2":
-        print("Affichage des datasets")
-
-    elif choix == "3":
-        print("Recherche d'un dataset")
-
-    elif choix == "4":
-        print("Fermeture du programme")
-
-    else:
-        print("Choix invalide")
-
-# 6-Créez un dictionnaire pour stocker les métadonnées de chaque dataset
-
-dataset = {
-    "nom": nom,
-    "domaine": domaine,
-    "lignes": lignes,
-    "colonnes": colonnes,
-    "taille": taille,
-    "format": format_dataset,
-    "public": public
-}
-
-print("\n===== Résumé du dataset =====")
-
-print(dataset)
-
-# 7- Créez un tuple contenant les domaines autorisés.
-
-domaines_autorises = (
+DOMAINES = (
     "Santé",
     "Finance",
     "Agriculture",
@@ -73,45 +10,64 @@ domaines_autorises = (
     "Education"
 )
 
-# 8- Vérifiez que le domaine saisi, à la question 3, appartient au tuple
-
-if domaine in domaines_autorises:
-    print("Domaine valide")
-else:
-    print("Domaine non autorisé")
-
-# 9- Créez une liste contenant les datasets. Chaque ajout est enregistré dans la liste
-
 datasets = []
 
-datasets.append(dataset)
-
-print("\nListe des datasets :")
-print(datasets)
-
-
-# Fonction Ajouter un dataset
 
 def ajouter_dataset():
 
     print("\n=== Nouveau Dataset ===")
 
     nom = input("Nom : ")
+# Gestion  des exceptions pour que le programme continue de fonctionner.
     while True:
         domaine = input("Domaine : ").title()
 
-        if domaine in domaines_autorises:
+        if domaine in DOMAINES:
             break
         else:
             print("Domaine invalide.")
-            print("Domaines autorisés :", domaines_autorises)
+            print("Domaines autorisés :", DOMAINES)
+
+    while True:
+
+      try:
+          lignes = int(input("Nombre de lignes : "))
+          break
+      
+      except ValueError:
+          print("Veuillez saisir un nombre entier.")
 
 
-    lignes = int(input("Nombre de lignes : ")) 
-    colonnes = int(input("Nombre de colonnes : "))    
-    taille = float(input("Taille (Mo) : "))
-    format_ds = input("Format (CSV/JSON) : ").upper()
+
+    while True:
+    
+          try:
+              colonnes = int(input("Nombre de colonnes : "))
+              break
+          
+          
+          except ValueError:
+              print("Veuillez saisir un nombre entier.")
+    
+    while True:
+        
+              try:
+                  taille = float(input("Taille (Mo) : "))
+                  break
+              
+              
+              except ValueError:
+                  print("Veuillez saisir un nombre .")
+
+    while True:
+        format_ds = input("Format (CSV/JSON) : ").upper()
+
+        if format_ds in ("CSV", "JSON"):
+            break
+        print("Format invalide.")
+
     public = input("Public (true/false) : ").lower()
+
     if public == "true":
         public = True
     else:
@@ -132,7 +88,6 @@ def ajouter_dataset():
     print("\nDataset enregistré avec succès !")
 
 
-# Fonction afficher
 def afficher():
 
     if len(datasets) == 0:
@@ -148,20 +103,24 @@ def afficher():
 
         for cle, valeur in ds.items():
             print(f"{cle} : {valeur}")
+            
 
-# Fonction rechercher
+
 
 def rechercher():
 
     nom = input("Nom du dataset : ").lower()
 
     trouve = False
+  # Gestion  des exceptions pour que le programme continue de fonctionner.
     for ds in datasets:
 
      if ds["nom"].lower() == nom.lower():
 
         print(ds)
         return
+
+     raise LookupError("Dataset introuvable.")
 
     for ds in datasets:
 
@@ -177,7 +136,8 @@ def rechercher():
         print("Dataset introuvable.")
 
 
-# Fonction Modifier
+
+
 
 def modifier():
 
@@ -199,7 +159,8 @@ def modifier():
 
     print("Dataset introuvable.")
 
-# fonction Supprimer
+
+
 def supprimer():
 
     nom = input("Nom du dataset à supprimer : ").lower()
@@ -215,7 +176,7 @@ def supprimer():
     print("Dataset introuvable.")
 
 
-# Fonction Trier
+
 def trier():
 
     datasets.sort(key=lambda d: d["nom"].lower())
@@ -223,8 +184,6 @@ def trier():
     print("Datasets triés par nom.")
 
 
-
-# 11-Afficher les Statistiques
 def statistiques():
 
     print("\n===== STATISTIQUES =====")
@@ -249,7 +208,7 @@ def statistiques():
 
     repartition = {
         domaine: sum(1 for ds in datasets if ds["domaine"] == domaine)
-        for domaine in domaines_autorises
+        for domaine in DOMAINES
     }
 
     print("Nombre de datasets :", nb)
@@ -264,12 +223,6 @@ def statistiques():
 
     for domaine, nombre in repartition.items():
         print(f"{domaine} : {nombre}")
-
-statistiques()
-
-# 12- Créez le fichier datasets.csv 
-import csv
-import os
 
 
 def sauvegarder():
@@ -301,15 +254,21 @@ def recharger():
 
     datasets = []
 
+#Gestion  des exceptions pour que le programme continue de fonctionner.
+    try:
 
-with open("datasets.csv", "r", encoding="utf-8") as fichier:
+      with open("datasets.csv", "r", encoding="utf-8") as fichier:
 
         lecteur = list(csv.DictReader(fichier))
 
         if len(lecteur) == 0:
-         print("Le fichier est vide.")
+            raise EOFError
 
-with open("datasets.csv", "r", encoding="utf-8") as fichier:
+    except EOFError:
+
+     print("Le fichier est vide.")
+
+    with open("datasets.csv", "r", encoding="utf-8") as fichier:
 
         lecteur = csv.DictReader(fichier)
 
@@ -321,5 +280,62 @@ with open("datasets.csv", "r", encoding="utf-8") as fichier:
             ligne["public"] = ligne["public"] == "True"
 
             datasets.append(ligne)
+#Gestion  des exceptions pour que le programme continue de fonctionner.
+        try:
 
-print("Chargement terminé.")
+           recharger()
+
+        except FileNotFoundError:
+
+         print("Le fichier datasets.csv n'existe pas.")
+
+    print("Chargement terminé.")
+
+# Menu
+
+while True:
+
+    print("""
+===========================
+1. Ajouter un dataset
+2. Afficher les datasets
+3. Rechercher
+4. Modifier
+5. Supprimer
+6. Trier
+7. Statistiques
+8. Quitter
+===========================
+""")
+
+    choix = input("Votre choix : ")
+
+    if choix == "1":
+        ajouter_dataset()
+        input("Appuyez sur Entrée pour continuer...")
+    elif choix == "2":
+        afficher()
+        input("Appuyez sur Entrée pour continuer...")
+    elif choix == "3":
+        rechercher()
+        input("Appuyez sur Entrée pour continuer...")
+    elif choix == "4":
+        modifier()
+        input("Appuyez sur Entrée pour continuer...")
+    elif choix == "5":
+        supprimer()
+        input("Appuyez sur Entrée pour continuer...")
+    elif choix == "6":
+        trier()
+        input("Appuyez sur Entrée pour continuer...")
+    elif choix == "7":
+        statistiques()
+        input("Appuyez sur Entrée pour continuer...")
+
+    elif choix == "8":
+        print("Fin du programme.")
+        break
+
+    else:
+        print("Choix invalide.")
+        input("Appuyez sur Entrée pour refaire un choix ...")
