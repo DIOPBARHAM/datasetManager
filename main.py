@@ -266,3 +266,60 @@ def statistiques():
         print(f"{domaine} : {nombre}")
 
 statistiques()
+
+# 12- Créez le fichier datasets.csv 
+import csv
+import os
+
+
+def sauvegarder():
+
+    with open("datasets.csv", "w", newline="", encoding="utf-8") as fichier:
+
+        champs = [
+            "nom",
+            "domaine",
+            "lignes",
+            "colonnes",
+            "taille",
+            "format",
+            "public"
+        ]
+
+        writer = csv.DictWriter(fichier, fieldnames=champs)
+
+        writer.writeheader()
+
+        writer.writerows(datasets)
+
+    print("Sauvegarde effectuée.")
+
+
+def recharger():
+
+    global datasets
+
+    datasets = []
+
+
+with open("datasets.csv", "r", encoding="utf-8") as fichier:
+
+        lecteur = list(csv.DictReader(fichier))
+
+        if len(lecteur) == 0:
+         print("Le fichier est vide.")
+
+with open("datasets.csv", "r", encoding="utf-8") as fichier:
+
+        lecteur = csv.DictReader(fichier)
+
+        for ligne in lecteur:
+
+            ligne["lignes"] = int(ligne["lignes"])
+            ligne["colonnes"] = int(ligne["colonnes"])
+            ligne["taille"] = float(ligne["taille"])
+            ligne["public"] = ligne["public"] == "True"
+
+            datasets.append(ligne)
+
+print("Chargement terminé.")
