@@ -88,3 +88,138 @@ datasets.append(dataset)
 
 print("\nListe des datasets :")
 print(datasets)
+
+
+# Fonction Ajouter un dataset
+
+def ajouter_dataset():
+
+    print("\n=== Nouveau Dataset ===")
+
+    nom = input("Nom : ")
+    while True:
+        domaine = input("Domaine : ").title()
+
+        if domaine in domaines_autorises:
+            break
+        else:
+            print("Domaine invalide.")
+            print("Domaines autorisés :", domaines_autorises)
+
+
+    lignes = int(input("Nombre de lignes : ")) 
+    colonnes = int(input("Nombre de colonnes : "))    
+    taille = float(input("Taille (Mo) : "))
+    format_ds = input("Format (CSV/JSON) : ").upper()
+    public = input("Public (true/false) : ").lower()
+    if public == "true":
+        public = True
+    else:
+        public = False
+
+    dataset = {
+        "nom": nom,
+        "domaine": domaine,
+        "lignes": lignes,
+        "colonnes": colonnes,
+        "taille": taille,
+        "format": format_ds,
+        "public": public
+    }
+
+    datasets.append(dataset)
+
+    print("\nDataset enregistré avec succès !")
+
+
+# Fonction afficher
+def afficher():
+
+    if len(datasets) == 0:
+        print("\nAucun dataset enregistré.")
+        return
+
+    print("\n===== LISTE DES DATASETS =====")
+
+    for i, ds in enumerate(datasets, start=1):
+
+        print(f"\nDataset {i}")
+        print("--------------------")
+
+        for cle, valeur in ds.items():
+            print(f"{cle} : {valeur}")
+
+# Fonction rechercher
+
+def rechercher():
+
+    nom = input("Nom du dataset : ").lower()
+
+    trouve = False
+    for ds in datasets:
+
+     if ds["nom"].lower() == nom.lower():
+
+        print(ds)
+        return
+
+    for ds in datasets:
+
+        if ds["nom"].lower() == nom:
+            print("\nDataset trouvé :")
+
+            for cle, valeur in ds.items():
+                print(f"{cle} : {valeur}")
+
+            trouve = True
+
+    if not trouve:
+        print("Dataset introuvable.")
+
+
+# Fonction Modifier
+
+def modifier():
+
+    nom = input("Nom du dataset à modifier : ").lower()
+
+    for ds in datasets:
+
+        if ds["nom"].lower() == nom:
+
+            print("Nouvelles informations")
+
+            ds["nom"] = input("Nom : ")
+            ds["lignes"] = int(input("Nombre de lignes : "))
+            ds["colonnes"] = int(input("Nombre de colonnes : "))
+            ds["taille"] = float(input("Taille : "))
+
+            print("Modification effectuée.")
+            return
+
+    print("Dataset introuvable.")
+
+# fonction Supprimer
+def supprimer():
+
+    nom = input("Nom du dataset à supprimer : ").lower()
+
+    for ds in datasets:
+
+        if ds["nom"].lower() == nom:
+
+            datasets.remove(ds)
+            print("Dataset supprimé.")
+            return
+
+    print("Dataset introuvable.")
+
+
+# Fonction Trier
+def trier():
+
+    datasets.sort(key=lambda d: d["nom"].lower())
+
+    print("Datasets triés par nom.")
+
+
