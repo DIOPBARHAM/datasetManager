@@ -72,3 +72,10 @@ domaines_autorises = (
     "Transport",
     "Education"
 )
+
+# 8- Vérifiez que le domaine saisi, à la question 3, appartient au tuple
+
+if domaine in domaines_autorises:
+    print("Domaine valide")
+else:
+    print("Domaine non autorisé")
