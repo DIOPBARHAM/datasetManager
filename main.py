@@ -1,5 +1,5 @@
 from interface.menu import afficher_menu
-from datasets.gestion import ajouter_dataset, afficher_datasets, rechercher_datasets, modifier_datasets, supprimer_datasets, trier_datasets
+from datasets.gestion import ajouter_dataset, afficher_datasets, recharger, rechercher_datasets, modifier_datasets, sauvegarder, supprimer_datasets, trier_datasets
 from datasets.statistiques import statistiques
 
 
@@ -41,6 +41,14 @@ while True:
         input("Appuyez sur Entrée pour continuer...")
 
     elif choix == "8":
+        sauvegarder()
+        input("Appuyez sur Entrée pour continuer...")
+
+    elif choix == "9":
+        recharger()
+        input("Appuyez sur Entrée pour continuer...")
+
+    elif choix == "0":
         print("Fin du programme.")
         break
 

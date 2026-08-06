@@ -1,3 +1,7 @@
+import csv
+import os
+import sys
+
 DOMAINES = (
     "Santé",
     "Finance",
@@ -63,6 +67,11 @@ def ajouter_dataset():
 
     public = input("Public (true/false) : ").lower()
 
+    if public not in ("true", "false"):
+        print("Valeur invalide. Le dataset sera considéré comme privé.")
+        print("Valeur autorisée : true ou false")
+        public = input("Public (true/false) : ").lower()
+    
     if public == "true":
         public = True
     else:
@@ -101,8 +110,6 @@ def afficher_datasets():
 
         
 
-
-
 def rechercher_datasets():
 
     nom = input("Nom du dataset : ").lower()
@@ -114,8 +121,6 @@ def rechercher_datasets():
      if ds["nom"].lower() == nom.lower():
 
         print(ds)
-
-     raise LookupError("Dataset introuvable.")
 
     for ds in datasets:
 
@@ -145,9 +150,12 @@ def modifier_datasets():
             print("Nouvelles informations")
 
             ds["nom"] = input("Nom : ")
+            ds["domaine"]=input("Domaine : ").title()
             ds["lignes"] = int(input("Nombre de lignes : "))
             ds["colonnes"] = int(input("Nombre de colonnes : "))
             ds["taille"] = float(input("Taille : "))
+            ds["format"] = input("Format (CSV/JSON) : ").upper()
+            ds["public"] = input("Public (true/false) : ").lower() == "true"
 
             print("Modification effectuée.")
             return
@@ -178,6 +186,115 @@ def trier_datasets():
     if len(datasets) == 0:
         print("Aucun dataset.")
         return
-    else:
-        datasets.sort(key=lambda d: d["nom"].lower())
-        print("Datasets triés par nom.")
+   
+    datasets.sort(key=lambda d: d["nom"].lower())
+    print("Datasets triés par nom:")
+    print("-" * 90)
+    print(f"{'N°':<4} {'Nom':<15} {'Domaine':<15} {'Lignes':<10} {'Colonnes':<10} {'Taille':<10} {'Format':<8} {'Public'}")
+    print("-" * 90)
+
+    for i, ds in enumerate(datasets, start=1):
+
+        print(f"{i:<4} "
+              f"{ds['nom']:<15} "
+              f"{ds['domaine']:<15} "
+              f"{ds['lignes']:<10} "
+              f"{ds['colonnes']:<10} "
+              f"{ds['taille']:<10} "
+              f"{ds['format']:<8} "
+              f"{ds['public']}")
+
+    print("-" * 90)
+
+
+
+def sauvegarder():
+    liste_datasets = datasets
+    try:
+        with open("datasets.csv", "w", newline="", encoding="utf-8") as fichier:
+            champs = [
+                "nom",
+                "domaine",
+                "lignes",
+                "colonnes",
+                "taille",
+                "format",
+                "public"
+            ]
+
+            writer = csv.DictWriter(fichier, fieldnames=champs)
+            writer.writeheader()
+
+            for dataset in liste_datasets:
+                writer.writerow(dataset)
+
+        print("\nLes données ont été sauvegardées avec succès.")
+
+    except Exception as e:
+        print("Erreur lors de la sauvegarde :", e)
+
+
+
+
+def recharger():
+    liste_datasets = datasets
+    try:
+        with open("datasets.csv", "r", newline="", encoding="utf-8") as fichier:
+
+            lecteur = csv.DictReader(fichier)
+
+            liste_datasets.clear()
+
+            for ligne in lecteur:
+
+                dataset = {
+                    "nom": ligne["nom"],
+                    "domaine": ligne["domaine"],
+                    "lignes": int(ligne["lignes"]),
+                    "colonnes": int(ligne["colonnes"]),
+                    "taille": float(ligne["taille"]),
+                    "format": ligne["format"],
+                    "public": ligne["public"] == "True"
+                }
+
+                liste_datasets.append(dataset)
+
+        if len(liste_datasets) == 0:
+            print("\nLe fichier est vide.")
+        else:
+
+            print("\n=== le fichier datasets.csv ===")
+
+            champs = [
+                    "nom",
+                    "domaine",
+                    "lignes",
+                    "colonnes",
+                    "taille",
+                    "format",
+                    "public"
+                ]
+
+            print(",".join(champs))
+
+        for dataset in liste_datasets:
+            ligne = [
+                str(dataset["nom"]),
+                str(dataset["domaine"]),
+                str(dataset["lignes"]),
+                str(dataset["colonnes"]),
+                str(dataset["taille"]),
+                str(dataset["format"]),
+                str(dataset["public"])
+            ]
+
+            print(",".join(ligne))
+
+    except FileNotFoundError:
+        print("\nLe fichier datasets.csv n'existe pas.")
+
+    except ValueError:
+        print("\nErreur : données invalides dans le fichier.")
+
+    except Exception as e:
+        print("\nUne erreur est survenue :", e)

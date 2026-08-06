@@ -1,0 +1,4 @@
+nom,domaine,lignes,colonnes,taille,format,public
+titanic ,Transport,891,45,75.0,CSV,True
+wave ,Finance,456,445,54.0,JSON,False
+agronomie,Agriculture,147,45,52.0,CSV,True

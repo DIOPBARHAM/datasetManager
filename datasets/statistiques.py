@@ -1,8 +1,6 @@
 import csv
 import os
-
-datasets = []
-
+from datasets.gestion import datasets
 DOMAINES = (
     "Santé",
     "Finance",
@@ -52,68 +50,3 @@ def statistiques():
         print(f"{domaine} : {nombre}")
 
 
-def sauvegarder():
-
-    with open("datasets.csv", "w", newline="", encoding="utf-8") as fichier:
-
-        champs = [
-            "nom",
-            "domaine",
-            "lignes",
-            "colonnes",
-            "taille",
-            "format",
-            "public"
-        ]
-
-        writer = csv.DictWriter(fichier, fieldnames=champs)
-
-        writer.writeheader()
-
-        writer.writerows(datasets)
-
-    print("Sauvegarde effectuée.")
-
-
-def recharger():
-
-    global datasets
-
-    datasets = []
-
-#Gestion  des exceptions pour que le programme continue de fonctionner.
-    try:
-
-      with open("datasets.csv", "r", encoding="utf-8") as fichier:
-
-        lecteur = list(csv.DictReader(fichier))
-
-        if len(lecteur) == 0:
-            raise EOFError
-
-    except EOFError:
-
-     print("Le fichier est vide.")
-
-    with open("datasets.csv", "r", encoding="utf-8") as fichier:
-
-        lecteur = csv.DictReader(fichier)
-
-        for ligne in lecteur:
-
-            ligne["lignes"] = int(ligne["lignes"])
-            ligne["colonnes"] = int(ligne["colonnes"])
-            ligne["taille"] = float(ligne["taille"])
-            ligne["public"] = ligne["public"] == "True"
-
-            datasets.append(ligne)
-#Gestion  des exceptions pour que le programme continue de fonctionner.
-        try:
-
-           recharger()
-
-        except FileNotFoundError:
-
-         print("Le fichier datasets.csv n'existe pas.")
-
-    print("Chargement terminé.")
